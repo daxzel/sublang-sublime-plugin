@@ -14,7 +14,7 @@ def get_translated_result(page,text):
 
 	result = p.findall(span)[0]
 
-	result = result[1:len(result)-2]
+	result = result[1:len(result)-1]
 
 	return result
 
@@ -29,7 +29,7 @@ def translate(sl, tl, text):
 	translated_page = opener.open( "http://translate.google.com/translate_t?" + urllib.urlencode({'sl': sl, 'tl': tl}), 
 	data=urllib.urlencode({'hl': 'en', 'ie': 'UTF8', 'text': text.encode('utf-8'), 'sl': sl, 'tl': ()}) )   
 
-	return get_translated_result(translated_page.read(),text)
+	return get_translated_result(translated_page.read().decode('utf-8'),text)
 
 
 
@@ -38,7 +38,9 @@ class Sublang(sublime_plugin.TextCommand):
 		v = self.view
 
 		mes = v.substr(v.sel()[0])
-		sublime.message_dialog(translate("en", "ru", mes.encode("utf-8")))
+		
+		sublime.message_dialog(translate("en", "ru", mes))
+		#sublime.status_message(translate('en', 'ru', mes))
 
 
 
