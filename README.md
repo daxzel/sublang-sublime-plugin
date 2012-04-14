@@ -1,17 +1,20 @@
+
+Sublang
+
+=======
+
 Plug-in for Sublime Text 2 for the rapid translation of the words using google tsanslate.
 
-Using
+### Using
 
 ---------
 
 * Highlight the text.
 * Press ctrl+shift+t
 
-Installation
+### Installation
 
 ----------
-
-### Using Git ###
 
 Go to your Sublime Text 2 Packages directory and clone the repository using the command below:
 
