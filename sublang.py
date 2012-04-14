@@ -33,7 +33,7 @@ def translate(sl, tl, text):
 
 
 
-class TranslateCommnad(sublime_plugin.TextCommand):
+class TranslateCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		try:
 			v = self.view
@@ -45,9 +45,9 @@ class TranslateCommnad(sublime_plugin.TextCommand):
 			if str is None:
 				raise Exception, u'Erorr configuration. Not found sublang in config'
 			else:
-				langs = str.split('->')
+				langs = str.split('>')
 				if len(langs)!=2: 
-					raise Exception, u'Erorr configuration. Value sublang requre {1}->{2}'
+					raise Exception, u'Erorr configuration. Value sublang requre {1}>{2}'
 				else:
 					sl = langs[0].strip()
 					tl = langs[1].strip()
