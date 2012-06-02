@@ -1,42 +1,24 @@
+# -- coding: utf-8 --
 import sublime, sublime_plugin
 import threading  
 import re
 import sys
 import urllib
 import urllib2
+import json
 
-def get_translated_result(page,text):
+url = "http://translate.google.com/translate_a/t?client=t&text={0}&hl=en&sl={1}&tl={2}&multires=1"
 
-	p = re.compile('<span title="'+text+'"[^>]*>[^<]*</span>')
-
-	span = p.findall(page,re.DOTALL)[0]
-
-	p = re.compile('>[^<]*<')
-
-	result = p.findall(span)[0]
-
-	result = result[1:len(result)-1]
-
-	return result
-
-
-def translate(sl, tl, text):
-
+def translate(text, sourcelang, targetlang):
 	try:
-
-		opener = urllib2.build_opener() 
-
-		opener.addheaders = [('User-agent', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)')]   
-
-
-		translated_page = opener.open( "http://translate.google.com/translate_t?" + urllib.urlencode({'sl': sl, 'tl': tl}), 
-		data=urllib.urlencode({'hl': 'en', 'ie': 'UTF8', 'text': text.encode('utf-8'), 'sl': sl, 'tl': ()}) )   
-
-		page = translated_page.read().decode('utf-8')
-
-
-		sublime.status_message(get_translated_result(page,text))
-
+		
+		request = urllib2.Request(url.format(text.encode('utf-8'), sourcelang.encode('utf-8'), targetlang.encode('utf-8')),headers={ 'User-Agent': 'Mozilla/5.0', 'Accept-Charset': 'utf-8' })
+		response = urllib2.urlopen(request).read()
+		
+		fixed_json = re.sub(r',{2,}', ',', response).replace(',]', ']')
+		data = json.loads(fixed_json)
+		sublime.status_message(data[0][0][0])
+		print data[0][0][0]
 	except (urllib2.HTTPError) as (e):  
 		sublime.error_message('%s: HTTP error %s contacting Google Translate' % (__name__, str(e.code)))  
 	except (urllib2.URLError) as (e):  
@@ -50,7 +32,7 @@ class GoolgeTsanslateCaller(threading.Thread):
         threading.Thread.__init__(self)  
   
     def run(self):  
-    	translate(self.sl, self.tl, self.text)
+    	translate(self.text,self.sl, self.tl )
 
 
 class TranslateCommand(sublime_plugin.TextCommand):
