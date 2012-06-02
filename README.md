@@ -10,6 +10,7 @@ Plug-in for Sublime Text 2 for the rapid translation of the words using google t
 
 * Highlight the text.
 * Press ctrl+shift+t
+* if you whant translate and replace word press ctrl+shift+r
 
 ### Installation
 
