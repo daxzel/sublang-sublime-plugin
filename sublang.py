@@ -79,7 +79,17 @@ class TranslaterCommand(sublime_plugin.TextCommand):
 				else:
 					sl = langs[0].strip()
 					tl = langs[1].strip()
-					v.replace(edit, v.sel()[0], translate(mes,sl, tl))
+					if  mes.count('_') == 0:
+						v.replace(edit, v.sel()[0], translate(mes,sl, tl))
+					else:
+						arr = mes.split('_')
+						new_mes = ""
+						for item in arr:
+							if len(new_mes)>0:
+								new_mes += '_'
+							new_mes += translate(item,sl, tl)
+
+						v.replace(edit, v.sel()[0],new_mes)
 
 		except Exception as ex:
 			sublime.message_dialog(ex.message)
